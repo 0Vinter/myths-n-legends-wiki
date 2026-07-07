@@ -14,5 +14,9 @@
   "structures": {
     "name": "Structures",
     "icon": "TentTree"
+  },
+  "research_system": {
+    "name": "Research System",
+    "icon": "Book"
   }
 }

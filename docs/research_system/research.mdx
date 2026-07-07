@@ -1,0 +1,325 @@
+---
+title: Research System
+id: mythsandlegends:system/research
+icon: mythsandlegends:item/research_table
+type: system
+custom:
+    Type: Progression
+    Rarity: Common
+---
+
+The **Research System** is a data-driven progression mechanic that allows modpack developers to lock content behind custom research projects.
+
+Researches are defined using JSON files and can be used to unlock recipes, items, advancements and other rewards as players progress.
+
+## Overview
+
+Each research entry represents a discovery that players can complete by providing required materials and waiting for the research process to finish.
+
+**Researches support:**
+
+- Custom ingredients.
+- Research duration.
+- Rank requirements.
+- Progress messages.
+- Multiple reward types.
+
+## File Location
+
+**Research files are stored inside:**
+- data/namespace/research/your_research_file.json
+
+**Example:**
+- data/mythsandlegends/research/ancient_copper_sword.json
+
+---
+
+## Research File Structure
+
+A research file follows this format:
+
+```json
+    {
+      "id": "namespace:research_id",
+      "name": "Research Name",
+      "ingredients": [],
+      "research_time": 1000,
+      "required_rank": 1,
+      "messages": {},
+      "rewards": []
+    }
+```
+### Research ID
+The id field defines the unique identifier of the research.
+
+**Format:**
+- namespace:research_name
+
+**Example:**
+```json
+"id": "mythsandlegends:ancient_copper_sword"
+```
+Each research must have a unique ID.
+
+---
+
+**Name:**
+- Defines the display name of the research.
+
+**Example:**
+```json
+"name": "Copper Coin Sword"
+```
+
+---
+
+### Ingredients
+
+The ingredients property defines the materials required to begin the research.
+
+**Example:**
+```json
+    "ingredients": [
+        {
+            "item": "mythsandlegends:ancient_copper_coin",
+            "count": 2
+        }
+    ]
+```
+**This requires:**
+- 2x Ancient Copper Coin
+
+**Multiple ingredients can be added:**
+```json
+    "ingredients": [
+        {
+            "item": "minecraft:diamond",
+            "count": 3
+        },
+        {
+            "item": "minecraft:gold_ingot",
+            "count": 5
+        }
+    ]
+```
+
+---
+
+### Research Time
+The research_time property controls how long the research takes.
+
+The value is measured in Minecraft ticks.
+
+20 ticks = 1 second
+
+**Example:**
+```json
+"research_time": 12000
+```
+**Results in:**
+-10 minutes.
+
+---
+
+### Required Rank
+The required_rank property defines the minimum rank required to start the research.
+
+**Example:**
+```json
+"required_rank": 2
+```
+Players below rank 2 cannot begin the research.
+
+Ranks can be used to create progression tiers:
+
+Rank 0
+ └─ Basic Discoveries
+
+Rank 1
+ └─ Ancient Technology
+
+Rank 2
+ └─ Forbidden Knowledge
+
+---
+
+### Messages
+Messages allow custom notifications during the research process.
+
+All messages use Minecraft translation keys.
+
+**Example:**
+```json
+"messages": {
+    "start": "research.example.start",
+    "ready": "research.example.ready",
+    "completed": "research.example.completed"
+}
+```
+**Start Message:**
+- Displayed when the research begins.
+
+**Example:**
+```json
+"start": "research.myths.start"
+```
+
+---
+
+**Progress Messages**
+- Progress messages are displayed at specific completion percentages.
+
+**Example:**
+```json
+"progress": [
+    {
+        "at": 0.25,
+        "translationKey": "research.example.progress1"
+    },
+    {
+        "at": 0.50,
+        "translationKey": "research.example.progress2"
+    }
+]
+```
+**Available values:**
+
+<table>
+    <thead>
+        <tr>
+            <th>Value</th>
+            <th>Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0.25</td>
+            <td>25%</td>
+        </tr>
+        <tr>
+            <td>0.50</td>
+            <td>50%</td>
+        </tr>
+        <tr>
+            <td>0.25</td>
+            <td>75%</td>
+        </tr>
+    </tbody>
+</table>
+**Ready Message:**
+- Displayed when the research timer finishes.
+
+**Example:**
+```json
+"ready": "research.example.ready"
+```
+At this point the player can claim the reward.
+
+Completed Message
+
+Displayed after the reward has been claimed.
+
+**Example:**
+```json
+"completed": "research.example.completed"
+```
+
+---
+
+### Rewards
+The rewards property defines what the player receives after completing the research.
+
+**Example:**
+```json
+"rewards": [
+    {
+        "type": "recipe",
+        "id": "mythsandlegends:copper_coin_sword"
+    }
+]
+```
+**Reward Types:**
+- Recipe
+- Unlock
+
+Unlocks a Minecraft recipe.
+
+**Example:**
+```json
+{
+    "type": "recipe",
+    "id": "minecraft:diamond_sword"
+}
+```
+
+---
+
+**Complete Example:**
+```json
+{
+  "id": "mythsandlegends:ancient_copper_sword",
+  "name": "Copper Coin Sword",
+
+  "ingredients": [
+    {
+      "item": "mythsandlegends:ancient_copper_coin",
+      "count": 2
+    }
+  ],
+
+  "research_time": 1000,
+
+  "required_rank": 1,
+
+  "messages": {
+    "start": "research.mythsandlegends.ancient_copper_sword.start",
+
+    "progress": [
+      {
+        "at": 0.25,
+        "translationKey": "research.mythsandlegends.ancient_copper_sword.progress1"
+      }
+    ],
+
+    "ready": "research.mythsandlegends.ancient_copper_sword.ready",
+
+    "completed": "research.mythsandlegends.ancient_copper_sword.completed"
+  },
+
+  "rewards": [
+    {
+      "type": "recipe",
+      "id": "mythsandlegends:copper_coin_sword"
+    }
+  ]
+}
+```
+
+---
+
+## Translation File
+Research messages must be added inside the mod language file.
+
+**Location:**
+- assets/namespace/lang/en_us.json
+
+**Example:**
+```json
+{
+  "research.mythsandlegends.ancient_copper_sword.start":
+  "You started researching the Copper Coin Sword.",
+
+  "research.mythsandlegends.ancient_copper_sword.ready":
+  "The research is complete!"
+}
+```
+
+---
+
+## Developer Notes
+Research files are completely data-driven.
+Modpacks can add custom researches without modifying code.
+Multiple researches can unlock the same type of content.
+Translation keys should always be used instead of hardcoded messages.
+
+---
