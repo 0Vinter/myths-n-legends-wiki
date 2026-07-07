@@ -13,7 +13,6 @@ The **Research System** is a data-driven progression mechanic that allows modpac
 Researches are defined using JSON files and can be used to unlock recipes, items, advancements and other rewards as players progress.
 
 ## Overview
-
 Each research entry represents a discovery that players can complete by providing required materials and waiting for the research process to finish.
 
 **Researches support:**
@@ -25,7 +24,6 @@ Each research entry represents a discovery that players can complete by providin
 - Multiple reward types.
 
 ## File Location
-
 **Research files are stored inside:**
 - data/namespace/research/your_research_file.json
 
@@ -35,7 +33,6 @@ Each research entry represents a discovery that players can complete by providin
 ---
 
 ## Research File Structure
-
 A research file follows this format:
 
 ```json
@@ -74,7 +71,6 @@ Each research must have a unique ID.
 ---
 
 ### Ingredients
-
 The ingredients property defines the materials required to begin the research.
 
 **Example:**
@@ -122,24 +118,50 @@ The value is measured in Minecraft ticks.
 ---
 
 ### Required Rank
-The required_rank property defines the minimum rank required to start the research.
+The required_rank property defines the minimum NPC rank required for this research to become available.
+
+The Research NPC is only responsible for providing available researches. Once a player starts or completes a research, the progress is stored individually for that player.
 
 **Example:**
 ```json
-"required_rank": 2
+"required_rank": 1
 ```
-Players below rank 2 cannot begin the research.
+The Research NPC must have the required skill at rank **number** or higher.
+
+If the NPC is removed or dies, player research progress is preserved.
 
 Ranks can be used to create progression tiers:
 
-Rank 0
+Rank 1
  └─ Basic Discoveries
 
-Rank 1
+Rank 2
  └─ Ancient Technology
 
-Rank 2
+Rank 3
  └─ Forbidden Knowledge
+
+## Player Progress
+
+Research progress is stored per player, similar to Minecraft advancements and recipe unlocks.
+
+Each player has independent research data:
+
+**Player A:**
+
+
+Copper Coin Sword
+- ✓ Completed
+
+
+**Player B:**
+
+
+Copper Coin Sword
+- ✗ Not researched
+
+
+Research completion is not tied to the Research NPC.
 
 ---
 
@@ -183,7 +205,6 @@ All messages use Minecraft translation keys.
 ]
 ```
 **Available values:**
-
 <table>
     <thead>
         <tr>
@@ -229,29 +250,57 @@ Displayed after the reward has been claimed.
 ### Rewards
 The rewards property defines what the player receives after completing the research.
 
+Rewards are delivered through **Research Notes**, an item that contains the discovered knowledge.
+
+When a research is completed, the Research NPC gives the player the corresponding Research Notes. The player can right-click the item to claim the reward.
+
+**Recipe Example:**
+```json
+{
+    "type": "recipe",
+    "id": "minecraft:enchanting_table"
+}
+```
+**Item Example:**
+```json
+{
+    "type": "item",
+    "id": "minecraft:enchanting_table"
+}
+```
+**Currently supported reward types:**
+
+- Recipe
+- Item
+
+**Recipe Reward:**
+
+- A recipe reward unlocks a Minecraft recipe for the player.
+- The Research Notes item must be consumed before the recipe is permanently unlocked.
+- After claiming the reward, the recipe becomes permanently available for that player, similar to Minecraft recipe unlocks.
+
+**Item Reward:**
+
+- An item reward gives the player an item directly.
+
+**Multiple Rewards**
+
+- A research can contain multiple rewards.
+- The Research Notes will contain all rewards associated with that research.
+
 **Example:**
 ```json
 "rewards": [
     {
         "type": "recipe",
         "id": "mythsandlegends:copper_coin_sword"
+    },
+    {
+        "type": "item",
+        "id": "minecraft:diamond"
     }
 ]
 ```
-**Reward Types:**
-- Recipe
-- Unlock
-
-Unlocks a Minecraft recipe.
-
-**Example:**
-```json
-{
-    "type": "recipe",
-    "id": "minecraft:diamond_sword"
-}
-```
-
 ---
 
 **Complete Example:**
@@ -317,9 +366,9 @@ Research messages must be added inside the mod language file.
 ---
 
 ## Developer Notes
-Research files are completely data-driven.
-Modpacks can add custom researches without modifying code.
-Multiple researches can unlock the same type of content.
-Translation keys should always be used instead of hardcoded messages.
+- Research files are completely data-driven.
+- Modpacks can add custom researches without modifying code.
+- Multiple researches can unlock the same type of content.
+- Translation keys should always be used instead of hardcoded messages.
 
 ---
