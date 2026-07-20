@@ -38,7 +38,7 @@ Research projects are managed through the **Chronicler**, who serves as the play
 - Required materials.
 - The active research project.
 
-<Asset location="mythsandlegends:gui/research_ui" width={276}/>
+<Asset location="mythsandlegends:gui/research_ui" width={552}/>
 ---
 
 ## File Location
@@ -46,7 +46,7 @@ Research projects are managed through the **Chronicler**, who serves as the play
 - data/namespace/research/your_research_file.json
 
 **Example:**
-- data/mythsandlegends/research/ancient_copper_sword.json
+- data/mythsandlegends/research/tenebrite_refinement_research.json
 
 ---
 
@@ -70,14 +70,15 @@ A research file follows this format:
     }
 ```
 ## Research ID
-The id field defines the unique identifier of the research.
+The id field uniquely identifies a research project.
 
+This identifier is also used by `required_research` when creating research dependencies.
 **Format:**
 - namespace:research_name
 
 **Example:**
 ```json
-"id": "mythsandlegends:refined_tenebrite"
+"id": "mythsandlegends:tenebrite_refinement"
 ```
 Each research must have a unique ID.
 
@@ -151,13 +152,13 @@ The ingredients property defines the materials required to begin the research.
 ```json
     "ingredients": [
         {
-            "item": "mythsandlegends:ancient_copper_coin",
+            "item": "mythsandlegends:tenebrite_shard",
             "count": 2
         }
     ]
 ```
 **This requires:**
-- 2x Ancient Copper Coin
+- 2x Tenebrite Shardss
 
 **Multiple ingredients can be added:**
 ```json
@@ -220,15 +221,13 @@ Each player has independent research data:
 
 **Player A:**
 
-
-Copper Coin Sword
+Refined Tenebrite
 - ✓ Completed
 
 
 **Player B:**
 
-
-Copper Coin Sword
+Refined Tenebrite
 - ✗ Not researched
 
 
@@ -365,7 +364,7 @@ Item rewards are granted immediately when the research is claimed.
 "rewards": [
     {
         "type": "recipe",
-        "id": "mythsandlegends:copper_coin_sword"
+        "id": "mythsandlegends:refined_tenebrite"
     },
     {
         "type": "item",
@@ -376,22 +375,24 @@ Item rewards are granted immediately when the research is claimed.
 ---
 
 ## Required Research
-The required_research field defines prerequisite research projects that must be completed before the current project becomes available.
+The required_research field defines one or more prerequisite research projects that must be completed before the current project becomes available.
 
-**Example:**
-- Tenebrite Shard -> Refined Tenebrite -> Noctifer Tenebris
-
+Each entry references the **research ID** of another research project.
 **Example:**
 ```json
 "required_research": [
     "mythsandlegends:refined_tenebrite"
 ]
 ```
+
+**Example Progression:**
+- Tenebrite Shard -> Refined Tenebrite -> Noctifer Tenebris
+
 Multiple prerequisite research projects are also supported.
 ```json
 "required_research": [
-    "mythsandlegends:ancient_metalworking",
-    "mythsandlegends:refined_tenebrite"
+    "mythsandlegends:research_a",
+    "mythsandlegends:research_b "
 ]
 ```
 All listed prerequisite research projects must be completed before this research becomes available.
@@ -493,27 +494,27 @@ Research projects may define random events that can occur while the Chronicler i
         <tr>
             <td>Breakthrough</td>
             <td>Grants a significant research progress bonus.</td>
-            <td></td>
+            <td>15%</td>
         </tr>
         <tr>
             <td>Focus</td>
             <td>Grants a small progress bonus.</td>
-            <td></td>
+            <td>5%</td>
         </tr>
         <tr>
             <td>Distraction</td>
-            <td>Greatly Reduces research progress.</td>
-            <td></td>
+            <td>Does not modify progress, but interrupts the Chronicler.</td>
+            <td>0%</td>
         </tr>
         <tr>
             <td>Mistake</td>
             <td>Reduces research progress slightly.</td>
-            <td></td>
+            <td>10%</td>
         </tr>
         <tr>
             <td>Master Insight</td>
             <td>Grants a massive progress bonus</td>
-            <td></td>
+            <td>30%</td>
         </tr>
     </tbody>
 </table>
@@ -530,11 +531,11 @@ Research messages must be added inside the mod language file.
 **Example:**
 ```json
 {
-  "research.mythsandlegends.ancient_copper_sword.start":
-  "You started researching the Copper Coin Sword.",
+  "research.mythsandlegends.refined_tenebrite.start":
+  "The Tenebrite Shards are unstable. I must discover how to refine their umbral essence.",
 
-  "research.mythsandlegends.ancient_copper_sword.ready":
-  "The research is complete!"
+  "research.mythsandlegends.refined_tenebrite.ready":
+  "I have already mastered the refinement of Tenebrite."
 }
 ```
 
