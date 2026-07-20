@@ -8,20 +8,38 @@ custom:
     Rarity: Common
 ---
 
-The **Research System** is a data-driven progression mechanic that allows modpack developers to lock content behind custom research projects.
+The **Research System** is a fully data-driven progression framework that allows mods and datapacks to gate recipes, items, equipment and other content behind customizable research projects.
 
-Researches are defined using JSON files and can be used to unlock recipes, items, advancements and other rewards as players progress.
+Each research project can require materials, NPC progression, previous discoveries and random events, allowing authors to create complete research trees without writing additional code.
 
 ## Overview
 Each research entry represents a discovery that players can complete by providing required materials and waiting for the research process to finish.
 
-**Researches support:**
-
+**The Research System supports:**
+- Categories.
+- Rarity.
+- Repeatable research projects.
 - Custom ingredients.
 - Research duration.
 - Rank requirements.
 - Progress messages.
 - Multiple reward types.
+- Research prerequisite.
+- Random research events.
+
+## Chronicler Interface
+Research projects are managed through the **Chronicler**, who serves as the player's researcher throughout the progression system.
+
+**The interface displays:**
+- The Chronicler's current rank.
+- Experience towards the next rank.
+- Current research status.
+- Research progress.
+- Required materials.
+- The active research project.
+
+<Asset location="mythsandlegends:gui/research_ui" width={276}/>
+---
 
 ## File Location
 **Research files are stored inside:**
@@ -39,14 +57,19 @@ A research file follows this format:
     {
       "id": "namespace:research_id",
       "name": "Research Name",
+      "category":"combat",
+      "rarity": "rare",
+      "repeatable": false,
       "ingredients": [],
-      "research_time": 1000,
+      "research_time": 12000,
       "required_rank": 1,
       "messages": {},
-      "rewards": []
+      "rewards": [],
+      "required_research":[],
+      "random_events":[]
     }
 ```
-### Research ID
+## Research ID
 The id field defines the unique identifier of the research.
 
 **Format:**
@@ -54,7 +77,7 @@ The id field defines the unique identifier of the research.
 
 **Example:**
 ```json
-"id": "mythsandlegends:ancient_copper_sword"
+"id": "mythsandlegends:refined_tenebrite"
 ```
 Each research must have a unique ID.
 
@@ -65,12 +88,63 @@ Each research must have a unique ID.
 
 **Example:**
 ```json
-"name": "Copper Coin Sword"
+"name": "Refined Tenebrite Research Notes"
 ```
 
 ---
+## Category
+The category field classifies a research project into a specific group, similar to how Minecraft categorizes recipes and advancements.
 
-### Ingredients
+Categories may be used by the interface or other systems to organize research projects.
+**Example:**
+```json
+    "category": "combat"
+```
+
+- Combat
+- Armor
+- Relic
+- Tools
+- Misc
+
+---
+
+## Rarity
+The rarity field uses Minecraft's built-in rarity system to determine the visual rarity of a research project.
+
+**Supported values are the vanilla rarities:**
+- Common
+- Uncommon
+- Rare
+- Epic
+
+**Example:**
+```json
+    "rarity": "epic"
+```
+
+**Common categories include:**
+- Common
+- Uncommon
+- Rare
+- Epic
+- Legendary
+
+---
+
+## Repeatable
+Research projects may optionally be repeatable.
+
+- When enabled, the research can be completed multiple times.
+- When disabled, the research becomes permanently completed after being claimed.
+
+**Example:**
+```json
+    "repeatable": true
+```
+---
+
+## Ingredients
 The ingredients property defines the materials required to begin the research.
 
 **Example:**
@@ -101,7 +175,7 @@ The ingredients property defines the materials required to begin the research.
 
 ---
 
-### Research Time
+## Research Time
 The research_time property controls how long the research takes.
 
 The value is measured in Minecraft ticks.
@@ -117,7 +191,7 @@ The value is measured in Minecraft ticks.
 
 ---
 
-### Required Rank
+## Required Rank
 The required_rank property defines the minimum NPC rank required for this research to become available.
 
 The Research NPC is only responsible for providing available researches. Once a player starts or completes a research, the progress is stored individually for that player.
@@ -162,7 +236,7 @@ Research completion is not tied to the Research NPC.
 
 ---
 
-### Messages
+## Messages
 Messages allow custom notifications during the research process.
 
 All messages use Minecraft translation keys.
@@ -244,12 +318,13 @@ Displayed after the reward has been claimed.
 
 ---
 
-### Rewards
+## Rewards
 The rewards property defines what the player receives after completing the research.
 
-Rewards are delivered through **Research Notes**, an item that contains the discovered knowledge.
+Recipe rewards are delivered through **Research Notes**. Research Notes permanently store every unlocked recipe.
+Players must use the notes to permanently learn the contained recipes.
 
-When a research is completed, the Research NPC gives the player the corresponding Research Notes. The player can right-click the item to claim the reward.
+Item rewards are granted immediately when the research is claimed.
 
 **Recipe Example:**
 ```json
@@ -300,46 +375,149 @@ When a research is completed, the Research NPC gives the player the correspondin
 ```
 ---
 
+## Required Research
+The required_research field defines prerequisite research projects that must be completed before the current project becomes available.
+
+**Example:**
+- Tenebrite Shard -> Refined Tenebrite -> Noctifer Tenebris
+
+**Example:**
+```json
+"required_research": [
+    "mythsandlegends:refined_tenebrite"
+]
+```
+Multiple prerequisite research projects are also supported.
+```json
+"required_research": [
+    "mythsandlegends:ancient_metalworking",
+    "mythsandlegends:refined_tenebrite"
+]
+```
+All listed prerequisite research projects must be completed before this research becomes available.
+
+---
+
 **Complete Example:**
 ```json
 {
-  "id": "mythsandlegends:ancient_copper_sword",
-  "name": "Copper Coin Sword",
-
+  "id": "mythsandlegends:refined_tenebrite",
+  "name": "Tenebrite Refinement Research Notes",
+  "repeatable": false,
+  "category": "material",
+  "rarity": "uncommon",
   "ingredients": [
     {
-      "item": "mythsandlegends:ancient_copper_coin",
-      "count": 2
+      "item": "mythsandlegends:tenebrite_shard",
+      "count": 8
+    },
+    {
+      "item": "mythsandlegends:cursed_core",
+      "count": 1
     }
   ],
-
-  "research_time": 1000,
-
+  "research_time": 12000,
   "required_rank": 1,
-
   "messages": {
-    "start": "research.mythsandlegends.ancient_copper_sword.start",
-
+    "start": "research.mythsandlegends.refined_tenebrite.start",
     "progress": [
       {
         "at": 0.25,
-        "translationKey": "research.mythsandlegends.ancient_copper_sword.progress1"
+        "translationKey": "research.mythsandlegends.refined_tenebrite.progress1"
+      },
+      {
+        "at": 0.50,
+        "translationKey": "research.mythsandlegends.refined_tenebrite.progress2"
+      },
+      {
+        "at": 0.75,
+        "translationKey": "research.mythsandlegends.refined_tenebrite.progress3"
       }
     ],
-
-    "ready": "research.mythsandlegends.ancient_copper_sword.ready",
-
-    "completed": "research.mythsandlegends.ancient_copper_sword.completed"
+    "ready": "research.mythsandlegends.refined_tenebrite.ready",
+    "completed": "research.mythsandlegends.refined_tenebrite.completed"
   },
-
   "rewards": [
     {
       "type": "recipe",
-      "id": "mythsandlegends:copper_coin_sword"
+      "id": "mythsandlegends:refined_tenebrite"
+    },
+    {
+      "type": "item",
+      "id": "minecraft:experience_bottle",
+      "count": 4
+    }
+  ],
+  "required_research": [],
+  "random_events": [
+    {
+      "type": "distraction",
+      "chance": 0.02
+    },
+    {
+      "type": "focused",
+      "chance": 0.02
     }
   ]
 }
 ```
+
+---
+
+## Random Events
+Research projects may define random events that can occur while the Chronicler is researching.
+
+**Example:**
+```json
+"random_events": [
+    {
+        "type": "breakthrough",
+        "chance": 0.04
+    },
+    {
+        "type": "mistake",
+        "chance": 0.03
+    }
+]
+```
+**Supported event types:**
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Effect</th>
+            <th>Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Breakthrough</td>
+            <td>Grants a significant research progress bonus.</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Focus</td>
+            <td>Grants a small progress bonus.</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Distraction</td>
+            <td>Greatly Reduces research progress.</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Mistake</td>
+            <td>Reduces research progress slightly.</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Master Insight</td>
+            <td>Grants a massive progress bonus</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+Every second while researching, the Chronicler has a chance to trigger one of the configured events.
 
 ---
 
@@ -367,5 +545,9 @@ Research messages must be added inside the mod language file.
 - Modpacks can add custom researches without modifying code.
 - Multiple researches can unlock the same type of content.
 - Translation keys should always be used instead of hardcoded messages.
-
+- Research projects support prerequisite chains.
+- Research projects support random research events.
+- Research categories and rarity are entirely data-driven.
+- Research Notes permanently unlock recipe rewards.
+- Research projects may be repeatable.
 ---
