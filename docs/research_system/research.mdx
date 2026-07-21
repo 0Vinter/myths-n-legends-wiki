@@ -1,7 +1,7 @@
 ---
 title: Research System
 id: mythsandlegends:system/research
-icon: mythsandlegends:item/research_table
+icon: mythsandlegends:item/research_notes
 type: system
 custom:
     Type: Progression
@@ -70,7 +70,7 @@ A research file follows this format:
     }
 ```
 ## Research ID
-The id field uniquely identifies a research project.
+The id property uniquely identifies a research project.
 
 This identifier is also used by `required_research` when creating research dependencies.
 **Format:**
@@ -94,7 +94,7 @@ Each research must have a unique ID.
 
 ---
 ## Category
-The category field classifies a research project into a specific group, similar to how Minecraft categorizes recipes and advancements.
+The category property classifies a research project into a specific group, similar to how Minecraft categorizes recipes and advancements.
 
 Categories may be used by the interface or other systems to organize research projects.
 **Example:**
@@ -111,7 +111,7 @@ Categories may be used by the interface or other systems to organize research pr
 ---
 
 ## Rarity
-The rarity field uses Minecraft's built-in rarity system to determine the visual rarity of a research project.
+The rarity property uses Minecraft's built-in rarity system to determine the visual rarity of a research project.
 
 **Supported values are the vanilla rarities:**
 - Common
@@ -123,13 +123,6 @@ The rarity field uses Minecraft's built-in rarity system to determine the visual
 ```json
     "rarity": "epic"
 ```
-
-**Common categories include:**
-- Common
-- Uncommon
-- Rare
-- Epic
-- Legendary
 
 ---
 
@@ -158,7 +151,7 @@ The ingredients property defines the materials required to begin the research.
     ]
 ```
 **This requires:**
-- 2x Tenebrite Shardss
+- 2x Tenebrite Shards
 
 **Multiple ingredients can be added:**
 ```json
@@ -195,7 +188,7 @@ The value is measured in Minecraft ticks.
 ## Required Rank
 The required_rank property defines the minimum NPC rank required for this research to become available.
 
-The Research NPC is only responsible for providing available researches. Once a player starts or completes a research, the progress is stored individually for that player.
+The Research NPC is only responsible for providing available research projects. Once a player starts or completes a research, the progress is stored individually for that player.
 
 **Example:**
 ```json
@@ -206,12 +199,36 @@ The Research NPC must have the required skill at rank **number** or higher.
 If the NPC is removed or dies, player research progress is preserved.
 
 **Ranks can be used to create progression tiers:**
-
-- Rank 1 -> Basic Discoveries
-
-- Rank 2 -> Ancient Technology
-
-- Rank 3 -> Forbidden Knowledge
+<table>
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Wanderer</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Seeker</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Lorekeeper</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Keeper of Secrets</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Ancient Sage</td>
+        </tr>
+    </tbody>
+</table>
 
 ## Player Progress
 
@@ -220,15 +237,10 @@ Research progress is stored per player, similar to Minecraft advancements and re
 Each player has independent research data:
 
 **Player A:**
-
-Refined Tenebrite
-- ✓ Completed
-
+- Refined Tenebrite -> Completed ✓
 
 **Player B:**
-
-Refined Tenebrite
-- ✗ Not researched
+- Refined Tenebrite -> Not researched ✗
 
 
 Research completion is not tied to the Research NPC.
@@ -253,7 +265,7 @@ All messages use Minecraft translation keys.
 
 **Example:**
 ```json
-"start": "research.myths.start"
+"start": "research.mythsandlegends.start"
 ```
 
 ---
@@ -266,11 +278,11 @@ All messages use Minecraft translation keys.
 "progress": [
     {
         "at": 0.25,
-        "translationKey": "research.example.progress1"
+        "translationKey": "research.mythsandlegends.progress1"
     },
     {
         "at": 0.50,
-        "translationKey": "research.example.progress2"
+        "translationKey": "research.mythsandlegends.progress2"
     }
 ]
 ```
@@ -375,7 +387,7 @@ Item rewards are granted immediately when the research is claimed.
 ---
 
 ## Required Research
-The required_research field defines one or more prerequisite research projects that must be completed before the current project becomes available.
+The required_research property defines one or more prerequisite research projects that must be completed before the current project becomes available.
 
 Each entry references the **research ID** of another research project.
 **Example:**
@@ -523,7 +535,7 @@ Every second while researching, the Chronicler has a chance to trigger one of th
 ---
 
 ## Translation File
-Research messages must be added inside the mod language file.
+Research messages must be added inside the mod/datapack language file.
 
 **Location:**
 - assets/namespace/lang/en_us.json
@@ -543,12 +555,12 @@ Research messages must be added inside the mod language file.
 
 ## Developer Notes
 - Research files are completely data-driven.
-- Modpacks can add custom researches without modifying code.
-- Multiple researches can unlock the same type of content.
+- Modpacks can add custom research project without modifying code.
+- Multiple research projects can unlock the same type of content.
 - Translation keys should always be used instead of hardcoded messages.
 - Research projects support prerequisite chains.
 - Research projects support random research events.
-- Research categories and rarity are entirely data-driven.
 - Research Notes permanently unlock recipe rewards.
 - Research projects may be repeatable.
+
 ---
