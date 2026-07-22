@@ -345,6 +345,35 @@ Players must use the notes to permanently learn the contained recipes.
 
 Item rewards are granted immediately when the research is claimed.
 
+**Reward Types:**
+The Research System currently supports the following reward types:
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>recipe</td>
+            <td>Grants a Research Notes item that unlocks the specified recipe when used.</td>
+        </tr>
+        <tr>
+            <td>item</td>
+            <td>Gives the specified item directly to the player.</td>
+        </tr>
+        <tr>
+            <td>enchanted_book</td>
+            <td>Gives an enchanted book with the specified enchantment and level.</td>
+        </tr>
+        <tr>
+            <td>potion</td>
+            <td>Gives one or more potion items, either using a vanilla potion or custom effects.</td>
+        </tr>
+    </tbody>
+</table>
+
 **Recipe Example:**
 ```json
 {
@@ -359,39 +388,107 @@ Item rewards are granted immediately when the research is claimed.
     "id": "minecraft:enchanting_table"
 }
 ```
-**Currently supported reward types:**
+**Enchanted Book Example:**
 
-- Recipe
-- Item
-
-**Recipe Reward:**
-
-- A recipe reward unlocks a Minecraft recipe for the player.
-- The Research Notes item must be consumed before the recipe is permanently unlocked.
-- After claiming the reward, the recipe becomes permanently available for that player, similar to Minecraft recipe unlocks.
-
-**Item Reward:**
-
-- An item reward gives the player an item directly.
-
-**Multiple Rewards**
-
-- A research can contain multiple rewards.
-- The Research Notes will contain all rewards associated with that research.
-
-**Example:**
 ```json
-"rewards": [
+{
+  "type": "enchanted_book",
+  "enchantment": "minecraft:sharpness",
+  "level": 3,
+  "count": 1
+}
+```
+**Properties:**
+<table>
+    <thead>
+        <tr>
+            <th>Property</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>enchant</td>
+            <td>Registry ID of the enchantment.</td>
+        </tr>
+        <tr>
+            <td>level</td>
+            <td>Enchantment level.</td>
+        </tr>
+        <tr>
+            <td>count</td>
+            <td>Number of enchanted books to give.</td>
+        </tr>
+    </tbody>
+</table>
+
+**Potion Reward (Vanilla Potion):**
+
+Creates one or more vanilla potions.
+
+**Container Types:**
+- potion
+- splash_potion
+- lingering_potion
+
+**Potion Example:**
+```json
+{
+  "type": "potion",
+  "potion": "minecraft:strong_healing",
+  "container": "splash_potion",
+  "count": 2
+}
+```
+**Potion Reward (Custom Effects)**
+
+Potion rewards can also define their own effects instead of referencing an existing vanilla potion.
+**Custom Potion Example:**
+```json
+{
+  "type": "potion",
+  "container": "lingering_potion",
+  "count": 1,
+  "effects": [
     {
-        "type": "recipe",
-        "id": "mythsandlegends:refined_tenebrite"
+      "effect": "minecraft:regeneration",
+      "duration": 600,
+      "amplifier": 1
     },
     {
-        "type": "item",
-        "id": "minecraft:diamond"
+      "effect": "minecraft:absorption",
+      "duration": 200,
+      "amplifier": 0
     }
-]
+  ]
+}
 ```
+
+**Each effect supports:**
+<table>
+    <thead>
+        <tr>
+            <th>Property</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>effect</td>
+            <td>Registry Id of the status effect.</td>
+        </tr>
+        <tr>
+            <td>duration</td>
+            <td>Effect duration in ticks.</td>
+        </tr>
+        <tr>
+            <td>amplifier</td>
+            <td>Effect level </td>
+        </tr>
+    </tbody>
+</table>
+
+## Rewards can be freely combined. A single research may grant multiple rewards of different types, such as recipes, items, enchanted books and potions.
 ---
 
 ## Required Research
