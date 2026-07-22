@@ -102,10 +102,14 @@ Categories may be used by the interface or other systems to organize research pr
     "category": "combat"
 ```
 
-- Combat
-- Armor
-- Relic
+- Building Blocks
+- Decorations
+- Redstone
+- Transportation
 - Tools
+- Combat
+- Food
+- Brewing
 - Misc
 
 ---
@@ -265,7 +269,7 @@ All messages use Minecraft translation keys.
 
 **Example:**
 ```json
-"start": "research.mythsandlegends.start"
+"start": "research.mythsandlegends.tenebrite_refinement.start"
 ```
 
 ---
@@ -278,11 +282,15 @@ All messages use Minecraft translation keys.
 "progress": [
     {
         "at": 0.25,
-        "translationKey": "research.mythsandlegends.progress1"
+        "dialogue": "research.mythsandlegends.tenebrite_refinement.progress1"
     },
     {
         "at": 0.50,
-        "translationKey": "research.mythsandlegends.progress2"
+        "dialogue": "research.mythsandlegends.tenebrite_refinement.progress2"
+    },
+    {
+        "at": 0.75,
+        "dialogue": "research.mythsandlegends.tenebrite_refinement.progress3"
     }
 ]
 ```
@@ -314,7 +322,7 @@ All messages use Minecraft translation keys.
 
 **Example:**
 ```json
-"ready": "research.example.ready"
+"ready": "research.mythsandlegends.tenebrite_refinement.ready"
 ```
 At this point the player can claim the reward.
 
@@ -324,7 +332,7 @@ Displayed after the reward has been claimed.
 
 **Example:**
 ```json
-"completed": "research.example.completed"
+"completed": "research.mythsandlegends.tenebrite_refinement.completed"
 ```
 
 ---
@@ -436,15 +444,15 @@ All listed prerequisite research projects must be completed before this research
     "progress": [
       {
         "at": 0.25,
-        "translationKey": "research.mythsandlegends.refined_tenebrite.progress1"
+        "dialogue": "research.mythsandlegends.refined_tenebrite.progress1"
       },
       {
         "at": 0.50,
-        "translationKey": "research.mythsandlegends.refined_tenebrite.progress2"
+        "dialogue": "research.mythsandlegends.refined_tenebrite.progress2"
       },
       {
         "at": 0.75,
-        "translationKey": "research.mythsandlegends.refined_tenebrite.progress3"
+        "dialogue": "research.mythsandlegends.refined_tenebrite.progress3"
       }
     ],
     "ready": "research.mythsandlegends.refined_tenebrite.ready",
