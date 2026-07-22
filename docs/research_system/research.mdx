@@ -346,6 +346,7 @@ Players must use the notes to permanently learn the contained recipes.
 Item rewards are granted immediately when the research is claimed.
 
 **Reward Types:**
+
 The Research System currently supports the following reward types:
 <table>
     <thead>
@@ -435,7 +436,7 @@ Creates one or more vanilla potions.
 ```json
 {
   "type": "potion",
-  "potion": "minecraft:strong_healing",
+  "potion": "minecraft:health_boost",
   "container": "splash_potion",
   "count": 2
 }
@@ -488,7 +489,8 @@ Potion rewards can also define their own effects instead of referencing an exist
     </tbody>
 </table>
 
-## Rewards can be freely combined. A single research may grant multiple rewards of different types, such as recipes, items, enchanted books and potions.
+> Rewards can be freely combined. A single research may grant multiple rewards of different types, such as recipes, items, enchanted books and potions.
+
 ---
 
 ## Required Research
@@ -658,7 +660,7 @@ Research messages must be added inside the mod/datapack language file.
 
 ---
 
-## Developer Notes
+## Developer Notes:
 - Research files are completely data-driven.
 - Modpacks can add custom research project without modifying code.
 - Multiple research projects can unlock the same type of content.
